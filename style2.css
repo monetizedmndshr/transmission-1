@@ -33,7 +33,9 @@ body {
   -ms-overflow-style: none;
 }
 
-
+#terminal-container::-webkit-scrollbar {
+  display: none;
+}
 
 /* ===== Terminal Output ===== */
 #terminal-output {
@@ -411,9 +413,14 @@ body::after {
   text-shadow: 0 0 5px #a1dbf4;
 }
 
+.progress-container {
+  margin-top: 0.5rem;
+  margin-bottom: 0.25rem;
+}
 
-
-
+.progress-label {
+  margin-bottom: 1.5rem;
+}
 
 #terminal-output div {
   margin-bottom: 0.25rem; /* Add a little space between lines */
@@ -515,7 +522,24 @@ button {
 }
 
 /* Mobile optimization */
+@media (max-width: 600px) {
+  .chat-wrapper {
+    padding: 0.5rem;
+    width: 95vw;
+  }
 
+  #messageInput {
+    font-size: 1rem;
+    padding: 10px;
+  }
+
+  .top-links-inner {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+  }
+  
+}
 
 #chat::-webkit-scrollbar {
   display: none;

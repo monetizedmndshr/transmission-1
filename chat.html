@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Live Terminal Chat</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Top navigation links -->
+  <div class="top-links-wrapper">
+    <div class="top-links-inner">
+      <a href="#" class="top-link">[ DEX ]</a>
+      <a href="https://x.com/MonetizedMNDSHR" class="top-link" target="_blank">[ X ]</a>
+    </div>
+  </div>
+  
+  <div class="chat-container" id="chat"></div>  
+
+  <!-- Message input field (styled like Continue button) -->
+  <input id="messageInput" type="text" placeholder="> Type your message..." autocomplete="off" />
+
+  <!-- Socket.IO + Logic -->
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    const socket = io();
+    const chat = document.getElementById('chat');
+    const input = document.getElementById('messageInput');
+
+    // Emit message on Enter
+    input.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' && input.value.trim() !== '') {
+        socket.emit('chat message', input.value.trim());
+        input.value = '';
+      }
+    });
+
+    // Display received messages
+    socket.on('chat message', (msg) => {
+    const isScrolledToBottom = chat.scrollHeight - chat.clientHeight <= chat.scrollTop + 5;
+
+    const msgElement = document.createElement('div');
+    msgElement.textContent = msg;
+    chat.appendChild(msgElement);
+
+    if (isScrolledToBottom) {
+    chat.scrollTop = chat.scrollHeight;
+    }
+    });
+
+  </script>
+
+</body>
+</html>

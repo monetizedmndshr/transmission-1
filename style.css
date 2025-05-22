@@ -22,6 +22,7 @@ body {
   height: 60vh;
   min-height: 250px;
   padding: 16px;
+  padding-bottom: 100px; /* space for fixed input */
   background: radial-gradient(#001100, #000000);
   filter: contrast(1.2) brightness(1.1);
   overflow-y: auto;
@@ -424,7 +425,7 @@ button {
   position: absolute;
   top: 0;
   z-index: 1000;
-
+  margin-bottom: 1rem;
 }
 
 .top-links-inner {
@@ -444,4 +445,56 @@ button {
 
 .top-link:hover {
   text-decoration: underline;
+}
+
+#chat {
+  flex: 1;
+  overflow-y: auto;
+  margin-bottom: 12px;
+  color: #a1dbf4;
+  text-shadow: 0 0 2px #a1dbf4;
+}
+
+#messageInput {
+  position: fixed;
+  bottom: 100px; /* same distance as #action-button */
+  left: 50%;
+  transform: translateX(-50%);
+  background: black;
+  border: 1px solid #a1dbf4;
+  color: #a1dbf4;
+  font-family: 'Share Tech Mono', monospace;
+  padding: 10px;
+  width: 90vw;
+  max-width: 600px;
+  box-sizing: border-box;
+  text-shadow: 0 0 2px #a1dbf4;
+  box-shadow: 0 0 5px #00ffff;
+  z-index: 9999;
+}
+
+#messageInput::placeholder {
+  color: #a1dbf4;
+  opacity: 0.4;
+  text-shadow: 0 0 3px #a1dbf4;
+}
+
+/* ===== Chat Container ===== */
+.chat-container {
+  position: relative;
+  width: 90vw;
+  max-width: 600px;
+  height: calc(100vh - 90px); /* full height minus input + top links */
+  margin: 0 auto;
+  padding: 1rem;
+  padding-top: 2.5rem; /* space below top links */
+  padding-bottom: 0; /* input is fixed separately */
+  background: radial-gradient(#001100, #000000);
+  filter: contrast(1.2) brightness(1.1);
+  overflow-y: auto;
+  overflow-x: hidden;
+  animation: subtleFlicker 2s infinite;
+  box-sizing: border-box;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }

@@ -30,29 +30,37 @@
     const chat = document.getElementById('chat');
     const input = document.getElementById('messageInput');
 
-    // Emit message to serverless API endpoint on Enter
+    // Send message to API endpoint on Enter key
     input.addEventListener('keydown', async function (e) {
       if (e.key === 'Enter' && input.value.trim() !== '') {
         const message = input.value.trim();
         input.value = '';
 
-        await fetch('/api/send-message', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ message })
-        });
+        try {
+          const res = await fetch('/api/send-message', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message })
+          });
+
+          if (!res.ok) {
+            console.error('Failed to send message');
+          }
+        } catch (err) {
+          console.error('Request error:', err);
+        }
       }
     });
 
-    // Connect to Pusher
-    Pusher.logToConsole = false;
+    // Pusher subscription and event handling
     const pusher = new Pusher('22541ed2a8183729f691', {
       cluster: 'us2'
     });
 
     const channel = pusher.subscribe('chat-channel');
     channel.bind('chat-event', function(data) {
-      const isScrolledToBottom = chat.scrollHeight - chat.clientHeight <= chat.scrollTop + 5;
+      const isScrolledToBottom =
+        chat.scrollHeight - chat.clientHeight <= chat.scrollTop + 5;
 
       const msgElement = document.createElement('div');
       msgElement.textContent = data.message;

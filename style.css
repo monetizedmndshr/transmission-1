@@ -191,21 +191,43 @@ body::before {
 
 /* ===== Mobile ===== */
 @media (max-width: 600px) {
+  body {
+    font-size: 16px;
+  }
+
   .header {
     font-size: 1rem;
     margin-bottom: 0.5rem;
     padding: 0 10px;
   }
 
-  button {
-    font-size: 0.9rem;
-    padding: 8px 16px;
+  .top-links-inner {
+    font-size: 0.85rem;
+    padding: 0.5rem 1rem;
+    justify-content: space-between;
   }
 
-  #terminal-output {
-    font-size: 0.8rem;
+  button,
+  #messageInput {
+    font-size: 1rem;
+    padding: 10px;
+    width: 95vw;
+    max-width: 600px;
+  }
+
+  #terminal-output,
+  #chat {
+    font-size: 0.9rem;
+    line-height: 1.4;
+  }
+
+  .chat-wrapper,
+  #terminal-container {
+    width: 95vw;
+    padding: 0.5rem 1rem;
   }
 }
+
 
 /* ===== Glitch Header ===== */
 .glitch {
@@ -495,6 +517,24 @@ button {
   animation: subtleFlicker 2s infinite;
   overflow: hidden;
   box-sizing: border-box;
+}
+
+/* Mobile optimization */
+@media (max-width: 600px) {
+  .chat-wrapper {
+    padding: 0.5rem;
+    width: 95vw;
+  }
+
+  #messageInput {
+    font-size: 1rem;
+    padding: 10px;
+  }
+
+  .top-links-inner {
+    font-size: 0.9rem;
+    padding: 0.5rem 1rem;
+  }
 }
 
 #chat::-webkit-scrollbar {

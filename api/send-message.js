@@ -1,5 +1,3 @@
-require('dotenv').config(); // only used locally
-
 const Pusher = require("pusher");
 
 const pusher = new Pusher({

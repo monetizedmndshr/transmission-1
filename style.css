@@ -448,28 +448,30 @@ button {
 }
 
 #chat {
-  flex: 1;
+  height: 100%;
   overflow-y: auto;
-  margin-bottom: 12px;
-  color: #a1dbf4;
-  text-shadow: 0 0 2px #a1dbf4;
+  overflow-x: hidden;
+  padding: 1rem;
+  font-family: 'Share Tech Mono', monospace;
+  white-space: pre-wrap;
+  word-break: break-word;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
 #messageInput {
   position: fixed;
-  bottom: 100px; /* same distance as #action-button */
+  bottom: 30px;
   left: 50%;
   transform: translateX(-50%);
-  background: black;
-  border: 1px solid #a1dbf4;
-  color: #a1dbf4;
-  font-family: 'Share Tech Mono', monospace;
-  padding: 10px;
   width: 90vw;
   max-width: 600px;
+  background: black;
+  color: #a1dbf4;
+  border: 1px solid #a1dbf4;
+  padding: 10px;
+  font-family: 'Share Tech Mono', monospace;
   box-sizing: border-box;
-  text-shadow: 0 0 2px #a1dbf4;
-  box-shadow: 0 0 5px #00ffff;
   z-index: 9999;
 }
 
@@ -480,21 +482,21 @@ button {
 }
 
 /* ===== Chat Container ===== */
-.chat-container {
+.chat-wrapper {
   position: relative;
   width: 90vw;
   max-width: 600px;
-  height: calc(100vh - 90px); /* full height minus input + top links */
+  height: calc(100vh - 90px); /* top links + spacing */
   margin: 0 auto;
-  padding: 1rem;
-  padding-top: 2.5rem; /* space below top links */
-  padding-bottom: 0; /* input is fixed separately */
+  padding-top: 2.5rem; /* space below top nav */
+  padding-bottom: 100px; /* space for fixed input */
   background: radial-gradient(#001100, #000000);
   filter: contrast(1.2) brightness(1.1);
-  overflow-y: auto;
-  overflow-x: hidden;
   animation: subtleFlicker 2s infinite;
+  overflow: hidden;
   box-sizing: border-box;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
+}
+
+#chat::-webkit-scrollbar {
+  display: none;
 }

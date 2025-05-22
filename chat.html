@@ -15,41 +15,53 @@
     </div>
   </div>
   
+  <!-- Chat display area -->
   <div class="chat-wrapper">
     <div id="chat"></div>
-  </div> 
+  </div>
 
-  <!-- Message input field (styled like Continue button) -->
+  <!-- Fixed input field styled like "Continue" button -->
   <input id="messageInput" type="text" placeholder="> Type your message..." autocomplete="off" />
 
-  <!-- Socket.IO + Logic -->
-  <script src="/socket.io/socket.io.js"></script>
+  <!-- Pusher client -->
+  <script src="https://js.pusher.com/7.2/pusher.min.js"></script>
+
   <script>
-    const socket = io();
     const chat = document.getElementById('chat');
     const input = document.getElementById('messageInput');
 
-    // Emit message on Enter
-    input.addEventListener('keydown', function (e) {
+    // Emit message to serverless API endpoint on Enter
+    input.addEventListener('keydown', async function (e) {
       if (e.key === 'Enter' && input.value.trim() !== '') {
-        socket.emit('chat message', input.value.trim());
+        const message = input.value.trim();
         input.value = '';
+
+        await fetch('/api/send-message', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message })
+        });
       }
     });
 
-    // Display received messages
-    socket.on('chat message', (msg) => {
-    const isScrolledToBottom = chat.scrollHeight - chat.clientHeight <= chat.scrollTop + 5;
-
-    const msgElement = document.createElement('div');
-    msgElement.textContent = msg;
-    chat.appendChild(msgElement);
-
-    if (isScrolledToBottom) {
-    chat.scrollTop = chat.scrollHeight;
-    }
+    // Connect to Pusher
+    Pusher.logToConsole = false;
+    const pusher = new Pusher('22541ed2a8183729f691', {
+      cluster: 'us2'
     });
 
+    const channel = pusher.subscribe('chat-channel');
+    channel.bind('chat-event', function(data) {
+      const isScrolledToBottom = chat.scrollHeight - chat.clientHeight <= chat.scrollTop + 5;
+
+      const msgElement = document.createElement('div');
+      msgElement.textContent = data.message;
+      chat.appendChild(msgElement);
+
+      if (isScrolledToBottom) {
+        chat.scrollTop = chat.scrollHeight;
+      }
+    });
   </script>
 
 </body>

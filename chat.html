@@ -28,6 +28,7 @@
 
   <!-- Fixed input field styled like "Continue" button -->
   <input id="messageInput" type="text" placeholder="> Hit Enter to send..." autocomplete="off" />
+  
 
   <!-- Pusher client -->
   <script src="https://js.pusher.com/7.2/pusher.min.js"></script>
@@ -41,6 +42,14 @@
       username = 'user' + Math.floor(1000 + Math.random() * 9000);
       localStorage.setItem('chat-username', username);
     }
+    
+
+    input.addEventListener('focus', () => {
+    setTimeout(() => {
+        chat.scrollTop = chat.scrollHeight;
+    }, 300); // gives keyboard time to settle
+    });
+
   
     // Connect to Pusher
     Pusher.logToConsole = false;

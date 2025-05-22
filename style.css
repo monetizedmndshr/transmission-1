@@ -12,6 +12,7 @@ body {
   padding: 2vh 0;
   overflow: hidden;
   position: relative;
+  overscroll-behavior-y: contain;
 }
 
 /* ===== Terminal Container ===== */
@@ -497,7 +498,7 @@ button {
 
 #messageInput {
   position: fixed;
-  bottom: 30px;
+  bottom: 0px;
   left: 50%;
   transform: translateX(-50%);
   width: 90vw;
@@ -522,7 +523,7 @@ button {
   position: relative;
   width: 90vw;
   max-width: 600px;
-  height: calc(100vh - 90px); /* top links + spacing */
+  height: calc(100dvh - 100px); /* adjusts to dynamic viewport height */
   margin: 0 auto;
   padding-top: 2.5rem; /* space below top nav */
   padding-bottom: 100px; /* space for fixed input */

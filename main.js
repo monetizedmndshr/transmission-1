@@ -1,6 +1,3 @@
-const audio = new Audio('typing.wav');
-audio.volume = 0.2;
-
 const terminalOutput = document.getElementById('terminal-output');
 const container = document.getElementById('terminal-container');
 const actionButton = document.getElementById('action-button');
@@ -51,9 +48,7 @@ function typeCharacter() {
     line.textContent += currentLine[charIndex] || "";
 
     container.scrollTop = container.scrollHeight;
-    audio.currentTime = 0;
-    audio.play();
-
+  
     charIndex++;
 
     if (charIndex < currentLine.length) {
@@ -111,8 +106,6 @@ actionButton.addEventListener('click', () => {
       newLine.textContent = line;
       terminalOutput.appendChild(newLine);
       container.scrollTop = container.scrollHeight;
-      audio.currentTime = 0;
-      audio.play();
     }, index * 700);
   });
 });

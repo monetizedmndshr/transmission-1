@@ -500,6 +500,7 @@ button {
   word-break: break-word;
   scrollbar-width: none;
   -ms-overflow-style: none;
+  padding-bottom: 100px;
 }
 
 #messageInput {

@@ -1,4 +1,4 @@
-require('dotenv').config(); // only needed for local development
+require('dotenv').config(); // only used locally
 
 const Pusher = require("pusher");
 
@@ -7,7 +7,7 @@ const pusher = new Pusher({
   key: process.env.PUSHER_KEY,
   secret: process.env.PUSHER_SECRET,
   cluster: process.env.PUSHER_CLUSTER,
-  useTLS: true
+  useTLS: true,
 });
 
 module.exports = async (req, res) => {
@@ -22,10 +22,11 @@ module.exports = async (req, res) => {
   }
 
   try {
+    console.log("✅ Triggering message:", message); // <-- add this
     await pusher.trigger("chat-channel", "chat-event", { message });
     res.status(200).json({ success: true });
   } catch (error) {
-    console.error("Pusher trigger error:", error);
+    console.error("❌ Pusher trigger error:", error); // <-- capture full error
     res.status(500).json({ error: "Failed to send message" });
   }
 };

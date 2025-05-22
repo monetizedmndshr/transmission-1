@@ -1,398 +1,447 @@
 /* ===== Base Layout ===== */
 body {
-    background: black;
-    color: #a1dbf4;
-    font-family: 'Share Tech Mono', monospace;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    min-height: 100vh;
-    margin: 0;
-    padding: 2vh 0;
-    overflow: hidden;
-    position: relative;
+  background: black;
+  color: #a1dbf4;
+  font-family: 'Share Tech Mono', monospace;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  min-height: 100vh;
+  margin: 0;
+  padding: 2vh 0;
+  overflow: hidden;
+  position: relative;
+}
+
+/* ===== Terminal Container ===== */
+#terminal-container {
+  position: relative;
+  width: 90vw;
+  max-width: 60vh;
+  height: 60vh;
+  min-height: 250px;
+  padding: 16px;
+  background: radial-gradient(#001100, #000000);
+  filter: contrast(1.2) brightness(1.1);
+  overflow-y: auto;
+  overflow-x: hidden;
+  animation: subtleFlicker 2s infinite;
+  box-sizing: border-box;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+#terminal-container::-webkit-scrollbar {
+  display: none;
+}
+
+/* ===== Terminal Output ===== */
+#terminal-output {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  z-index: 5;
+  padding-bottom: 100px; /* <-- This ensures content stays above the fixed button */
+}
+
+/* ===== Header ===== */
+.header {
+  width: 100%;                  /* Take full width of the parent */
+  max-width: 600px;             /* Match container max */
+  text-align: center;
+  white-space: nowrap;          /* Prevent wrapping */
+  overflow: hidden;             /* Hide overflow if text is too long */
+  text-overflow: ellipsis;      /* Optional: add ellipsis if clipped */
+  font-size: 1.5rem;            /* Adjust as needed */
+  margin: 1rem 0;
+}
+
+/* ===== Scanlines on terminal ===== */
+#terminal-container::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(161, 219, 244, 0.08),
+    rgba(161, 219, 244, 0.08) 1px,
+    transparent 1px,
+    transparent 2px
+  );
+  pointer-events: none;
+  animation: flicker 0.18s infinite;
+  z-index: 2;
+  background-size: 100% 2px;
+}
+
+/* ===== Noise Texture ===== */
+body::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  opacity: 0.05;
+  pointer-events: none;
+  mix-blend-mode: screen;
+  z-index: 3;
+}
+
+/* ===== CRT Distortion FX ===== */
+.crt {
+  filter: contrast(1.15) brightness(1.1) saturate(1.2);
+  will-change: transform;
+  position: relative;
+  z-index: 1;
+  animation: crt-warp 8s infinite ease-in-out;
+  perspective: 1000px;
+  transform-style: preserve-3d;
+}
+
+/* Barrel distortion (optional, you can comment this out if needed) */
+@keyframes crt-warp {
+  0%, 100% {
+    transform: scale(1) perspective(800px) rotateX(0deg) rotateY(0deg);
   }
-  
-  /* ===== Terminal Container ===== */
-  #terminal-container {
-    position: relative;
-    width: 90vw;
-    max-width: 600px;
-    height: 60vh;
-    min-height: 250px;
-    padding: 16px;
-    background: radial-gradient(#001100, #000000);
-    filter: contrast(1.2) brightness(1.1);
-    overflow-y: auto;
-    overflow-x: hidden;
-    animation: subtleFlicker 1s infinite;
-    box-sizing: border-box;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
+  50% {
+    transform: scale(1.01) perspective(800px) rotateX(0.3deg) rotateY(-0.3deg);
   }
-  
-  #terminal-container::-webkit-scrollbar {
-    display: none;
-  }
-  
-  /* ===== Terminal Output ===== */
-  #terminal-output {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    white-space: pre-wrap;
-    word-break: break-word;
-    font-size: 0.9rem;
-    line-height: 1.4;
-    z-index: 5;
-  }
-  
-  /* ===== Header ===== */
+}
+
+/* Vertical scanlines + flicker */
+.crt::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(161, 219, 244, 0.06),
+    rgba(161, 219, 244, 0.06) 1px,
+    transparent 1px,
+    transparent 2px
+  );
+  animation: vertical-flicker 0.12s infinite;
+  mix-blend-mode: screen;
+  pointer-events: none;
+  z-index: 4;
+}
+
+/* Flicker + subtle pulse */
+@keyframes flicker {
+  0%, 100% { opacity: 0.1; }
+  50% { opacity: 0.3; }
+}
+@keyframes subtleFlicker {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.92; }
+}
+@keyframes vertical-flicker {
+  0%, 100% { opacity: 0.06; }
+  50% { opacity: 0.12; }
+}
+
+/* Chromatic Aberration FX */
+.crt #terminal-container,
+.crt.top-links-inner,
+.crt #action-button {
+  box-shadow:
+    0 0 0px red,
+    1px 0 2px rgba(255, 0, 0, 0.08),
+    -1px 0 2px rgba(0, 255, 255, 0.08);
+}
+
+
+
+/* ===== Buttons ===== */
+#action-button {
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: black;
+  color: #a1dbf4;
+  border: 1px solid #a1dbf4;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-size: 1rem;
+  text-shadow: 0 0 5px #a1dbf4;
+  box-shadow: 0 0 5px #00ffff;
+  z-index: 9999;
+}
+
+#action-button:hover {
+  background: #a1dbf4;
+  color: black;
+  box-shadow: 0 0 6px cyan, 1px 0 red, -1px 0 cyan;
+}
+
+/* ===== Mobile ===== */
+@media (max-width: 600px) {
   .header {
-    font-size: 1.2rem;
-    margin: 1rem 0 0.5rem;
-    color: #a1dbf4;
-    text-shadow: 0 0 5px #a1dbf4;
-    text-align: center;
-  }
-  
-  /* ===== Scanlines on terminal ===== */
-  #terminal-container::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: repeating-linear-gradient(
-      to bottom,
-      rgba(161, 219, 244, 0.08),
-      rgba(161, 219, 244, 0.08) 1px,
-      transparent 1px,
-      transparent 2px
-    );
-    pointer-events: none;
-    animation: flicker 0.18s infinite;
-    z-index: 2;
-    background-size: 100% 2px;
-  }
-  
-  /* ===== Noise Texture ===== */
-  body::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-size: cover;
-    opacity: 0.05;
-    pointer-events: none;
-    mix-blend-mode: screen;
-    z-index: 3;
-  }
-  
-  /* ===== CRT Distortion FX ===== */
-  .crt {
-    filter: contrast(1.15) brightness(1.1) saturate(1.2);
-    perspective: 1000px;
-    transform-style: preserve-3d;
-    will-change: transform;
-    animation: crt-warp 8s infinite ease-in-out;
-    position: relative;
-    z-index: 1;
-  }
-  
-  /* Barrel distortion */
-  @keyframes crt-warp {
-    0%, 100% {
-      transform: scale(1) perspective(800px) rotateX(0deg) rotateY(0deg);
-    }
-    50% {
-      transform: scale(1.01) perspective(800px) rotateX(0.3deg) rotateY(-0.3deg);
-    }
-  }
-  
-  /* Vertical flicker scanlines */
-  .crt::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: repeating-linear-gradient(
-      to bottom,
-      rgba(161, 219, 244, 0.06),
-      rgba(161, 219, 244, 0.06) 1px,
-      transparent 1px,
-      transparent 2px
-    );
-    animation: vertical-flicker 0.12s infinite;
-    mix-blend-mode: screen;
-    pointer-events: none;
-    z-index: 4;
-  }
-  
-  /* Flicker and pulse */
-  @keyframes flicker {
-    0%, 100% { opacity: 0.1; }
-    50% { opacity: 0.3; }
-  }
-  @keyframes subtleFlicker {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.92; }
-  }
-  @keyframes vertical-flicker {
-    0%, 100% { opacity: 0.06; }
-    50% { opacity: 0.12; }
-  }
-  
-  /* Chromatic aberration */
-  .crt #terminal-container {
-    box-shadow:
-      0 0 0px red,
-      1px 0 2px rgba(255, 0, 0, 0.08),
-      -1px 0 2px rgba(0, 255, 255, 0.08);
-  }
-  
-  /* ===== Buttons ===== */
-  button {
-    margin-top: 1rem;
-    background: black;
-    color: #a1dbf4;
-    border: 1px solid #a1dbf4;
-    padding: 10px 20px;
-    cursor: pointer;
     font-size: 1rem;
-    text-shadow: 0 0 5px #a1dbf4;
+    margin-bottom: 0.5rem;
+    padding: 0 10px;
   }
-  
-  button:hover {
-    background: #a1dbf4;
-    color: black;
-  }
-  
-  /* ===== Mobile ===== */
-  @media (max-width: 600px) {
-    .header {
-      font-size: 1rem;
-      margin-bottom: 0.5rem;
-      padding: 0 10px;
-    }
-  
-    button {
-      font-size: 0.9rem;
-      padding: 8px 16px;
-    }
-  
-    #terminal-output {
-      font-size: 0.8rem;
-    }
-  }
-  
-  /* ===== Glitch Header ===== */
-.glitch {
-    position: relative;
-    display: inline-block;
-    font-size: 1.5rem;
-    text-align: center;
-    text-shadow: 0 0 4px #a1dbf4, 0 0 8px #a1dbf4;
-    animation: glitch-skew 2s infinite linear alternate;
-  }
-  
-  .glitch::before,
-  .glitch::after {
-    content: attr(data-text);
-    position: absolute;
-    left: 0;
-    width: 100%;
-    color: #a1dbf4;
-    background: black;
-    overflow: hidden;
-    clip: rect(0, 900px, 0, 0);
-  }
-  
-  .glitch::before {
-    animation: glitch-top 1s infinite linear alternate-reverse;
-    color: #a1dbf4;
-  }
-  
-  .glitch::after {
-    animation: glitch-bottom 1s infinite linear alternate-reverse;
-    color: #a1dbf4;
-  }
-  
-  @keyframes glitch-top {
-    0% { clip: rect(0, 9999px, 0, 0); transform: translate(-3px, -3px); }
-    5% { clip: rect(0, 9999px, 5px, 0); transform: translate(3px, -1px); }
-    10% { clip: rect(0, 9999px, 0, 0); transform: none; }
-    100% { clip: rect(0, 9999px, 0, 0); transform: none; }
-  }
-  
-  @keyframes glitch-bottom {
-    0% { clip: rect(0, 9999px, 0, 0); transform: translate(3px, 3px); }
-    5% { clip: rect(5px, 9999px, 9999px, 0); transform: translate(-3px, 1px); }
-    10% { clip: rect(0, 9999px, 0, 0); transform: none; }
-    100% { clip: rect(0, 9999px, 0, 0); transform: none; }
-  }
-  
-  @keyframes glitch-skew {
-    0% { transform: skew(0.3deg); }
-    50% { transform: skew(-0.3deg); }
-    100% { transform: skew(0.3deg); }
-  }
-  
-  /* ===== Glass Screen Distortion Layer ===== */
-.glass-distortion {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    z-index: 999; /* Make sure it sits above everything */
-    background: repeating-radial-gradient(
-      circle at center,
-      rgba(255, 255, 255, 0.005) 0px,
-      rgba(255, 255, 255, 0.01) 2px,
-      transparent 3px,
-      transparent 6px
-    );
-    mix-blend-mode: overlay;
-    backdrop-filter: blur(0.5px) saturate(1.2) contrast(1.05);
-    animation: glass-warp 5s infinite ease-in-out alternate;
-  }
-  
-  /* ===== Optional Wavy Glass Movement ===== */
-  @keyframes glass-warp {
-    0% { transform: scale(1.005) skewX(0.15deg); }
-    100% { transform: scale(1.01) skewX(-0.15deg); }
-  }
-  
-  .typing::after {
-    content: '_';
-    animation: blink 1s steps(2, start) infinite;
-  }
-  
-  @keyframes blink {
-    50% { opacity: 0; }
-  }
-  
-  .glitch-flash {
-    animation: glitchFlash 0.3s ease-in-out;
-  }
-  @keyframes glitchFlash {
-    0% { filter: contrast(2) brightness(2) hue-rotate(20deg); }
-    50% { filter: contrast(1.2) brightness(1) hue-rotate(-20deg); }
-    100% { filter: none; }
-  }
-  
-  .crt::after {
-    background: repeating-linear-gradient(
-      to bottom,
-      rgba(161, 219, 244, 0.04) 0px,
-      rgba(161, 219, 244, 0.04) 1px,
-      transparent 2px,
-      transparent 4px
-    );
-    animation: scanDrift 4s linear infinite;
-  }
-  
-  @keyframes scanDrift {
-    0% { background-position-y: 0; }
-    100% { background-position-y: 100%; }
-  }
-  
-  @keyframes signalInterference {
-    0%, 100% { opacity: 1; }
-    5% { opacity: 0.85; }
-    10% { opacity: 0.95; }
-    20% { opacity: 0.9; }
-    25% { opacity: 1; }
-  }
-  .crt {
-    animation: signalInterference 6s infinite;
-  }
-  
-  button:hover {
-    box-shadow:
-      1px 0 red,
-      -1px 0 cyan;
-    transition: box-shadow 0.2s;
-  }
-  
-  body::after {
-    content: "";
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background: radial-gradient(ellipse at center, transparent 60%, black 100%);
-    pointer-events: none;
-    z-index: 999;
-  }
-  
-  .ascii-brain {
-    font-family: monospace;
-    color: #a1dbf4;
-    text-align: center;
-    line-height: 1;
-    white-space: pre;
-    margin-bottom: 1rem;
-    animation: subtleFlicker 1s infinite;
-  }
-  
-  .progress-container {
-    width: 80%;
-    max-width: 600px;
-    height: 12px;
-    background-color: #111;
-    border: 1px solid #a1dbf4;
-    box-shadow: 0 0 5px #a1dbf4;
-    margin-top: 10px;
-    position: relative;
-  }
-  
-  .progress-bar {
-    height: 100%;
-    width: 0%;
-    background-color: #a1dbf4;
-    transition: width 0.3s ease-in-out;
-    box-shadow: inset 0 0 6px #00ffff;
-  }
-  
-  .progress-label {
-    color: #a1dbf4;
-    font-size: 0.9rem;
-    margin-top: 4px;
-    text-align: center;
-    font-family: 'Share Tech Mono', monospace;
-    text-shadow: 0 0 5px #a1dbf4;
-  }
-  
-  .header {
-    margin-bottom: 1rem; /* or 1.5rem for more air */
-  }
-  
-  .progress-container {
-    margin-top: 0.5rem;
-    margin-bottom: 0.25rem;
-  }
-  
-  .progress-label {
-    margin-bottom: 1.5rem;
-  }
-  
-  #terminal-output div {
-    margin-bottom: 0.25rem; /* Add a little space between lines */
-  }
-  
-  #terminal-output div:empty {
-    margin-bottom: 0.8rem; /* Use blank lines for section breaks */
-  }
-  
+
   button {
-    margin-top: 2rem;
+    font-size: 0.9rem;
+    padding: 8px 16px;
   }
-  
+
+  #terminal-output {
+    font-size: 0.8rem;
+  }
+}
+
+/* ===== Glitch Header ===== */
+.glitch {
+  position: relative;
+  font-size: 1.2rem;
+  text-align: center;
+  text-shadow: 0 0 4px #a1dbf4, 0 0 8px #a1dbf4;
+  animation: glitch-skew 2s infinite linear alternate;
+  white-space: nowrap;
+  display: inline-block;
+  max-width: 100%;
+}
+
+.glitch::before,
+.glitch::after {
+  content: attr(data-text);
+  position: absolute;
+  left: 0;
+  width: 100%;
+  color: #a1dbf4;
+  background: black;
+  overflow: hidden;
+  clip: rect(0, 900px, 0, 0);
+}
+
+.glitch::before {
+  animation: glitch-top 2s infinite linear alternate-reverse;
+  color: #a1dbf4;
+}
+
+.glitch::after {
+  animation: glitch-bottom 2s infinite linear alternate-reverse;
+  color: #a1dbf4;
+}
+
+@keyframes glitch-top {
+  0% { clip: rect(0, 9999px, 0, 0); transform: translate(-3px, -3px); }
+  5% { clip: rect(0, 9999px, 5px, 0); transform: translate(3px, -1px); }
+  10% { clip: rect(0, 9999px, 0, 0); transform: none; }
+  100% { clip: rect(0, 9999px, 0, 0); transform: none; }
+}
+
+@keyframes glitch-bottom {
+  0% { clip: rect(0, 9999px, 0, 0); transform: translate(3px, 3px); }
+  5% { clip: rect(5px, 9999px, 9999px, 0); transform: translate(-3px, 1px); }
+  10% { clip: rect(0, 9999px, 0, 0); transform: none; }
+  100% { clip: rect(0, 9999px, 0, 0); transform: none; }
+}
+
+@keyframes glitch-skew {
+  0% { transform: skew(0.3deg); }
+  50% { transform: skew(-0.3deg); }
+  100% { transform: skew(0.3deg); }
+}
+
+/* ===== Glass Screen Distortion Layer ===== */
+.glass-distortion {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 999; /* Make sure it sits above everything */
+  background: repeating-radial-gradient(
+    circle at center,
+    rgba(255, 255, 255, 0.005) 0px,
+    rgba(255, 255, 255, 0.01) 2px,
+    transparent 3px,
+    transparent 6px
+  );
+  mix-blend-mode: overlay;
+  backdrop-filter: blur(0.5px) saturate(1.2) contrast(1.05);
+  animation: glass-warp 5s infinite ease-in-out alternate;
+}
+
+/* ===== Optional Wavy Glass Movement ===== */
+@keyframes glass-warp {
+  0% { transform: scale(1.005) skewX(0.15deg); }
+  100% { transform: scale(1.01) skewX(-0.15deg); }
+}
+
+.typing::after {
+  content: '_';
+  animation: blink 1s steps(2, start) infinite;
+}
+
+@keyframes blink {
+  50% { opacity: 0; }
+}
+
+.glitch-flash {
+  animation: glitchFlash 0.3s ease-in-out;
+}
+@keyframes glitchFlash {
+  0% { filter: contrast(2) brightness(2) hue-rotate(20deg); }
+  50% { filter: contrast(1.2) brightness(1) hue-rotate(-20deg); }
+  100% { filter: none; }
+}
+
+.crt::after {
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(161, 219, 244, 0.04) 0px,
+    rgba(161, 219, 244, 0.04) 1px,
+    transparent 2px,
+    transparent 4px
+  );
+  animation: scanDrift 4s linear infinite;
+}
+
+@keyframes scanDrift {
+  0% { background-position-y: 0; }
+  100% { background-position-y: 100%; }
+}
+
+@keyframes signalInterference {
+  0%, 100% { opacity: 1; }
+  5% { opacity: 0.85; }
+  10% { opacity: 0.95; }
+  20% { opacity: 0.9; }
+  25% { opacity: 1; }
+}
+.crt {
+  animation: signalInterference 6s infinite;
+}
+
+button:hover {
+  box-shadow:
+    1px 0 red,
+    -1px 0 cyan;
+  transition: box-shadow 0.2s;
+}
+
+body::after {
+  content: "";
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: radial-gradient(ellipse at center, transparent 60%, black 100%);
+  pointer-events: none;
+  z-index: 999;
+}
+
+.ascii-brain {
+  font-family: monospace;
+  color: #a1dbf4;
+  text-align: center;
+  line-height: 1;
+  white-space: pre;
+  margin-bottom: 1rem;
+  animation: subtleFlicker 1s infinite;
+}
+
+.progress-container {
+  width: 80%;
+  max-width: 600px;
+  height: 12px;
+  background-color: #111;
+  border: 1px solid #a1dbf4;
+  box-shadow: 0 0 5px #a1dbf4;
+  margin-top: 10px;
+  position: relative;
+}
+
+.progress-bar {
+  height: 100%;
+  width: 0%;
+  background-color: #a1dbf4;
+  transition: width 0.3s ease-in-out;
+  box-shadow: inset 0 0 6px #00ffff;
+}
+
+.progress-label {
+  color: #a1dbf4;
+  font-size: 0.9rem;
+  margin-top: 4px;
+  text-align: center;
+  font-family: 'Share Tech Mono', monospace;
+  text-shadow: 0 0 5px #a1dbf4;
+}
+
+.progress-container {
+  margin-top: 0.5rem;
+  margin-bottom: 0.25rem;
+}
+
+.progress-label {
+  margin-bottom: 1.5rem;
+}
+
+#terminal-output div {
+  margin-bottom: 0.25rem; /* Add a little space between lines */
+}
+
+#terminal-output div:empty {
+  margin-bottom: 0.8rem; /* Use blank lines for section breaks */
+}
+
+button {
+  margin-top: 2rem;
+}
+
+.logo {
+  width: 200px;
+  height: auto;
+  margin-bottom: 0.75rem;
+  filter: drop-shadow(0 0 5px #a1dbf4);
+  animation: subtleFlicker 1s infinite;
+}
+
+.top-links-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding-top: 20px;
+  position: absolute;
+  top: 0;
+  z-index: 1000;
+
+}
+
+.top-links-inner {
+  width: 90vw;
+  max-width: 600px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.top-link {
+  color: #a1dbf4;
+  font-size: 0.75rem;
+  text-decoration: none;
+  font-family: 'Share Tech Mono', monospace;
+  text-shadow: 0 0 3px #a1dbf4;
+}
+
+.top-link:hover {
+  text-decoration: underline;
+}

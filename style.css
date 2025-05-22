@@ -22,7 +22,7 @@ body {
   max-width: 60vh;
   height: 60vh;
   min-height: 250px;
-  padding: 16px;
+  padding: 32px;
   padding-bottom: 100px; /* space for fixed input */
   background: radial-gradient(#001100, #000000);
   filter: contrast(1.2) brightness(1.1);
@@ -204,7 +204,7 @@ body::before {
     align-items: center;
     font-size: 0.85rem;
     padding: 0.5rem 1rem;
-    gap: 1rem;
+    gap: 0.25rem;
     flex-wrap: wrap; /* allow wrapping on smaller screens */
   }
   
@@ -212,16 +212,17 @@ body::before {
   button,
   #messageInput {
     position: fixed;
-    bottom: 0;
+    bottom: 20px;
     left: 50%;
     transform: translateX(-50%);
-    width: 90vw;
+    width: 95vw;
     max-width: 600px;
     background: black;
     color: #a1dbf4;
     border: 1px solid #a1dbf4;
     padding: 10px;
     font-family: 'Share Tech Mono', monospace;
+    font-size: 1rem;
     box-sizing: border-box;
     z-index: 9999;
   }
@@ -449,21 +450,23 @@ button {
   width: 100%;
   display: flex;
   justify-content: center;
-  padding-top: 20px;
   position: absolute;
   top: 0;
+  padding-top: 20px;
   z-index: 1000;
-  margin-bottom: 1rem;
-  pointer-events: none; /* ensure they don’t block interaction */
 }
 
+
 .top-links-inner {
-  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
   max-width: 600px;
-  width: 90vw;
-  margin: 0 auto;
-  height: 1rem;
+  padding: 0 1rem;
+  box-sizing: border-box;
 }
+
 
 .top-link {
   color: #a1dbf4;
@@ -471,7 +474,6 @@ button {
   text-decoration: none;
   font-family: 'Share Tech Mono', monospace;
   text-shadow: 0 0 3px #a1dbf4;
-  position: absolute;
   pointer-events: auto; /* restore interaction */
 }
 
@@ -483,11 +485,6 @@ button {
   left: 0;
 }
 
-
-.top-link.center {
-  left: 50%;
-  transform: translateX(-50%);
-}
 
 .top-link.right {
   right: 0;
@@ -507,7 +504,7 @@ button {
 
 #messageInput {
   position: fixed;
-  bottom: 0px;
+  bottom: 30px;
   left: 50%;
   transform: translateX(-50%);
   width: 90vw;
@@ -519,7 +516,10 @@ button {
   font-family: 'Share Tech Mono', monospace;
   box-sizing: border-box;
   z-index: 9999;
+  box-shadow: 0 0 5px #00ffff;
+  text-shadow: 0 0 3px #a1dbf4;
 }
+
 
 #messageInput::placeholder {
   color: #a1dbf4;
@@ -534,13 +534,14 @@ button {
   max-width: 600px;
   height: calc(100dvh - 60px); /* tracks screen when keyboard opens */
   margin: 0 auto;
-  padding-top: 2.5rem; /* space below top nav */
+  padding-top: 4rem; /* Adjust based on actual height of top links */
   padding-bottom: 0px; /* space for fixed input */
   background: radial-gradient(#001100, #000000);
   filter: contrast(1.2) brightness(1.1);
   animation: subtleFlicker 2s infinite;
   overflow: hidden;
   box-sizing: border-box;
+
 }
 
 /* Mobile optimization */

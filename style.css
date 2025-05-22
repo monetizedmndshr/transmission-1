@@ -211,10 +211,19 @@ body::before {
 
   button,
   #messageInput {
-    font-size: 1rem;
-    padding: 10px;
-    width: 95vw;
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90vw;
     max-width: 600px;
+    background: black;
+    color: #a1dbf4;
+    border: 1px solid #a1dbf4;
+    padding: 10px;
+    font-family: 'Share Tech Mono', monospace;
+    box-sizing: border-box;
+    z-index: 9999;
   }
 
   #terminal-output,
@@ -523,10 +532,10 @@ button {
   position: relative;
   width: 90vw;
   max-width: 600px;
-  height: calc(100dvh - 100px); /* adjusts to dynamic viewport height */
+  height: calc(100dvh - 60px); /* tracks screen when keyboard opens */
   margin: 0 auto;
   padding-top: 2.5rem; /* space below top nav */
-  padding-bottom: 100px; /* space for fixed input */
+  padding-bottom: 0px; /* space for fixed input */
   background: radial-gradient(#001100, #000000);
   filter: contrast(1.2) brightness(1.1);
   animation: subtleFlicker 2s infinite;

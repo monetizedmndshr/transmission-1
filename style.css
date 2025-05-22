@@ -202,10 +202,15 @@ body::before {
   }
 
   .top-links-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     font-size: 0.85rem;
     padding: 0.5rem 1rem;
-    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap; /* allow wrapping on smaller screens */
   }
+  
 
   button,
   #messageInput {
@@ -451,10 +456,9 @@ button {
 }
 
 .top-links-inner {
-  width: 90vw;
-  max-width: 600px;
-  display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
 }
 
 .top-link {
@@ -532,9 +536,11 @@ button {
   }
 
   .top-links-inner {
-    font-size: 0.9rem;
-    padding: 0.5rem 1rem;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
   }
+  
 }
 
 #chat::-webkit-scrollbar {

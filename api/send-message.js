@@ -9,22 +9,12 @@ const pusher = new Pusher({
 });
 
 module.exports = async (req, res) => {
-  if (req.method !== "POST") {
-    return res.status(405).end("Method Not Allowed");
-  }
-
-  const { message } = req.body;
-
-  if (!message || typeof message !== "string") {
-    return res.status(400).json({ error: "Message is required" });
-  }
-
-  try {
-    console.log("✅ Triggering message:", message); // <-- add this
-    await pusher.trigger("chat-channel", "chat-event", { message });
+    const { message, username } = req.body;
+  
+    if (!message || typeof message !== "string") {
+      return res.status(400).json({ error: "Message is required" });
+    }
+  
+    await pusher.trigger("presence-chat", "chat-event", { message, username });
     res.status(200).json({ success: true });
-  } catch (error) {
-    console.error("❌ Pusher trigger error:", error); // <-- capture full error
-    res.status(500).json({ error: "Failed to send message" });
-  }
-};
+  };

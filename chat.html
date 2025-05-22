@@ -11,11 +11,13 @@
   <!-- Top navigation links -->
   <div class="top-links-wrapper">
     <div class="top-links-inner">
-        <a href="#" class="top-link">[ DEX ]</a>
-        <div id="onlineCount" class="top-link">[ 0 ONLINE ]</div>
-        <a href="https://x.com/MonetizedMNDSHR" class="top-link" target="_blank">[ X ]</a>
-      </div>
+      <a href="#" class="top-link">[ DEX ]</a>
+      <a href="https://x.com/MonetizedMNDSHR" class="top-link" target="_blank">[ X ]</a>
+    </div>
   </div>
+
+  <div id="onlineCount" class="top-link" style="text-align:center; margin-top: 10px;">[ 0 ONLINE ]</div>
+
   
   <!-- Chat display area -->
   <div class="chat-wrapper">
@@ -23,7 +25,7 @@
   </div>
 
   <!-- Fixed input field styled like "Continue" button -->
-  <input id="messageInput" type="text" placeholder="> Type your message..." autocomplete="off" />
+  <input id="messageInput" type="text" placeholder="> Hit Enter to send..." autocomplete="off" />
 
   <!-- Pusher client -->
   <script src="https://js.pusher.com/7.2/pusher.min.js"></script>
@@ -53,23 +55,24 @@
   
     // Show online count
     channel.bind('pusher:subscription_succeeded', members => {
-      const count = members.count;
-      const onlineDiv = document.createElement('div');
-      onlineDiv.id = "online-users";
-      onlineDiv.textContent = `[ ${count} ONLINE ]`;
-      onlineDiv.style.marginBottom = "10px";
-      chat.parentNode.insertBefore(onlineDiv, chat);
-    });
+  const count = members.count;
+  const onlineCountEl = document.getElementById('onlineCount');
+  if (onlineCountEl) {
+    onlineCountEl.textContent = `[ ${count} ONLINE ]`;
+  }
+});
+
+
   
-    channel.bind('pusher:member_added', member => {
-      const count = channel.members.count;
-      document.getElementById('online-users').textContent = `[ ${count} ONLINE ]`;
-    });
+channel.bind('pusher:member_added', member => {
+  const count = channel.members.count;
+  document.getElementById('onlineCount').textContent = `[ ${count} ONLINE ]`;
+});
   
-    channel.bind('pusher:member_removed', member => {
-      const count = channel.members.count;
-      document.getElementById('online-users').textContent = `[ ${count} ONLINE ]`;
-    });
+channel.bind('pusher:member_removed', member => {
+  const count = channel.members.count;
+  document.getElementById('onlineCount').textContent = `[ ${count} ONLINE ]`;
+});
   
     // Sending message
     input.addEventListener('keydown', async function (e) {

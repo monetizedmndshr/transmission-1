@@ -3,6 +3,7 @@ import "./globals.css";
 import { Share_Tech_Mono } from "next/font/google";
 import Link from "next/link";
 import { Analytics } from "@vercel/analytics/next"
+import { SpeedInsights } from "@vercel/speed-insights/next"
 
 const shareTechMono = Share_Tech_Mono({
   subsets: ["latin"],
@@ -51,7 +52,8 @@ export default function RootLayout({ children }) {
         </main>
 
         {/* Vercel Analytics */}
-        <Analytics />  {/* ← add it here */}
+        <Analytics /> 
+        <SpeedInsights />
 
       </body>
     </html>

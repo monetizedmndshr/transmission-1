@@ -31,6 +31,7 @@ export default function RootLayout({ children }) {
           <div className="max-w-3xl mx-auto flex items-center justify-between px-4 py-2">
             
             <Link 
+              className="text-sm hover:underline"
               href="https://dexscreener.com/"
               target="_blank"
               rel="noopener noreferrer"
@@ -50,7 +51,7 @@ export default function RootLayout({ children }) {
             >
               [ X ]
             </Link>
-            
+
           </div>
         </nav>
 

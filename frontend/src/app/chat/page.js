@@ -11,7 +11,7 @@ export default function ChatPage() {
   const [input, setInput] = useState("");
   const chatRef = useRef();
 
-  // Initialize username once on client
+  // initialize username in browser
   useEffect(() => {
     let u = localStorage.getItem("chat-username");
     if (!u) {
@@ -21,43 +21,36 @@ export default function ChatPage() {
     setUsername(u);
   }, []);
 
-  // Set up Pusher once we have a username
+  // subscribe to Pusher once we have a username
   useEffect(() => {
     if (!username) return;
-
     const pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_KEY, {
       cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER,
       authEndpoint: "/api/pusher-auth",
       auth: { params: { username } },
     });
-
     const channel = pusher.subscribe("presence-chat");
 
-    channel.bind("pusher:subscription_succeeded", (members) => {
-      setMembers(members.count);
-    });
-    channel.bind("pusher:member_added", () => {
-      setMembers(channel.members.count);
-    });
-    channel.bind("pusher:member_removed", () => {
-      setMembers(channel.members.count);
-    });
+    channel.bind("pusher:subscription_succeeded", (m) => setMembers(m.count));
+    channel.bind("pusher:member_added", () => setMembers(channel.members.count));
+    channel.bind("pusher:member_removed", () => setMembers(channel.members.count));
 
-    channel.bind("chat-event", (data) => {
-      setMessages((m) => [...m, `${data.username}: ${data.message}`]);
-      // auto-scroll
-      setTimeout(() => {
-        if (chatRef.current) {
-          chatRef.current.scrollTop = chatRef.current.scrollHeight;
-        }
-      }, 100);
-    });
+    channel.bind("chat-event", (data) =>
+      setMessages((m) => [...m, `${data.username}: ${data.message}`])
+    );
 
     return () => {
       channel.unbind_all();
       pusher.unsubscribe("presence-chat");
     };
   }, [username]);
+
+  // auto-scroll whenever messages change
+  useEffect(() => {
+    if (chatRef.current) {
+      chatRef.current.scrollTop = chatRef.current.scrollHeight;
+    }
+  }, [messages]);
 
   const send = async () => {
     if (!input.trim()) return;
@@ -70,7 +63,7 @@ export default function ChatPage() {
   };
 
   return (
-    <div className="flex-1 flex flex-col p-4 text-[#a1dbf4] font-mono">
+    <div className="flex-1 flex flex-col p-4 overflow-hidden text-[#a1dbf4] font-mono">
       <div className="mb-4 text-sm">[ {members} ONLINE ]</div>
 
       <div
@@ -82,7 +75,7 @@ export default function ChatPage() {
         ))}
       </div>
 
-      <div className="mt-4 flex">
+      <div className="mt-4 flex-none flex">
         <input
           type="text"
           value={input}

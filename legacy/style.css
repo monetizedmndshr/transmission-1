@@ -10,7 +10,10 @@ body {
   min-height: 100vh;
   margin: 0;
   padding: 2vh 0;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: hidden; /* prevents scrollbar */
+  height: 100vh;       /* use vh for desktop */
+  overscroll-behavior-y: contain;
   position: relative;
   overscroll-behavior-y: contain;
 }
@@ -31,6 +34,7 @@ body {
   animation: subtleFlicker 2s infinite;
   box-sizing: border-box;
   scrollbar-width: none;
+  margin-top: 2rem; /* or increase as needed */
   -ms-overflow-style: none;
 }
 

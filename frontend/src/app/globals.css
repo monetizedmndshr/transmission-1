@@ -1,0 +1,11 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: 'AkkuratMono';
+  src: url('/AkkuratMono-Regular.ttf') format('truetype');
+}
+html {
+  font-family: 'AkkuratMono', monospace;
+}

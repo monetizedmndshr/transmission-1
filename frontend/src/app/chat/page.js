@@ -21,7 +21,7 @@ export default function ChatPage() {
     setUsername(u);
   }, []);
 
-  // subscribe to Pusher
+  // subscribe to Pusher once we have a username
   useEffect(() => {
     if (!username) return;
     const pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_KEY, {
@@ -30,15 +30,9 @@ export default function ChatPage() {
       auth: { params: { username } },
     });
     const channel = pusher.subscribe("presence-chat");
-    channel.bind("pusher:subscription_succeeded", (m) =>
-      setMembers(m.count)
-    );
-    channel.bind("pusher:member_added", () =>
-      setMembers(channel.members.count)
-    );
-    channel.bind("pusher:member_removed", () =>
-      setMembers(channel.members.count)
-    );
+    channel.bind("pusher:subscription_succeeded", (m) => setMembers(m.count));
+    channel.bind("pusher:member_added", () => setMembers(channel.members.count));
+    channel.bind("pusher:member_removed", () => setMembers(channel.members.count));
     channel.bind("chat-event", (data) =>
       setMessages((m) => [...m, `${data.username}: ${data.message}`])
     );
@@ -78,30 +72,18 @@ export default function ChatPage() {
         ))}
       </div>
 
-      <div
-        className="
-          sticky bottom-0 flex items-center bg-black
-          border-t border-[#a1dbf4] px-4 py-2
-          pb-[env(safe-area-inset-bottom)]
-        "
-      >
+      <div className="mt-4 flex items-center bg-black px-4 py-2 pb-[env(safe-area-inset-bottom)]">
         <input
           type="text"
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && send()}
-          className="
-            flex-1 p-2 bg-black border border-[#a1dbf4]
-            text-[#a1dbf4] text-sm
-          "
+          className="flex-1 p-2 bg-black border border-[#a1dbf4] text-[#a1dbf4] text-sm"
           placeholder="Hit Enter to send…"
         />
         <button
           onClick={send}
-          className="
-            ml-2 px-4 py-2 border border-[#a1dbf4]
-            rounded hover:bg-[#a1dbf4]/20 text-sm
-          "
+          className="ml-2 px-4 py-2 border border-[#a1dbf4] rounded hover:bg-[#a1dbf4]/20 text-sm"
         >
           Send
         </button>

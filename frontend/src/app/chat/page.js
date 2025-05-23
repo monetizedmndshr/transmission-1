@@ -60,25 +60,28 @@ export default function ChatPage() {
   };
 
   return (
-    <div className="flex-1 flex flex-col overflow-hidden overscroll-none text-[#a1dbf4] font-mono">
+    // Fill available height, but no overflow here
+    <div className="flex-1 flex flex-col overflow-hidden text-[#a1dbf4] font-mono">
+
+      {/* Header (online count) */}
       <div className="p-4 text-sm">[ {members} ONLINE ]</div>
 
+      {/* ONLY this pane scrolls */}
       <div
         ref={chatRef}
-        className="flex-1 overflow-y-auto overscroll-contain px-4 space-y-2 text-sm"
+        className="flex-1 overflow-auto overscroll-contain px-4 space-y-2 text-sm"
       >
         {messages.map((m, i) => (
           <div key={i}>{m}</div>
         ))}
       </div>
 
+      {/* Footer (input) always visible */}
       <div
         className="
-          mt-4 flex items-center bg-black
+          flex-none flex items-center bg-black
           px-4 py-2
-          /* mobile: 60px + safe‐area inset */
           pb-[calc(60px+env(safe-area-inset-bottom))]
-          /* desktop+: 1rem + inset */
           md:pb-[calc(1rem+env(safe-area-inset-bottom))]
         "
       >

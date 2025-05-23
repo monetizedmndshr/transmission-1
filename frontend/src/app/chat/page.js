@@ -1,4 +1,3 @@
-// src/app/chat/page.js
 "use client";
 
 import { useState, useEffect, useRef } from "react";
@@ -72,15 +71,16 @@ export default function ChatPage() {
         ))}
       </div>
 
-       <div
-   className="
-     mt-4 flex items-center bg-black
-     px-4 py-2
-     /* mobile-only: extra padding */
-     pb-[calc(2rem+env(safe-area-inset-bottom))]
-     /* desktop+: back to normal padding */
-     md:pb-[calc(1rem+env(safe-area-inset-bottom))]
-   "    >    
+      <div
+        className="
+          mt-4 flex items-center bg-black
+          px-4 py-2
+          /* mobile: 60px + safe-area inset */
+          pb-[calc(100px+env(safe-area-inset-bottom))]
+          /* md+: 1rem + safe-area inset */
+          md:pb-[calc(1rem+env(safe-area-inset-bottom))]
+        "
+      >
         <input
           type="text"
           value={input}

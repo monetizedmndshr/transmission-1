@@ -11,7 +11,7 @@ export default function ChatPage() {
   const [input, setInput] = useState("");
   const chatRef = useRef();
 
-  // initialize username in browser
+  // initialize username
   useEffect(() => {
     let u = localStorage.getItem("chat-username");
     if (!u) {
@@ -21,7 +21,7 @@ export default function ChatPage() {
     setUsername(u);
   }, []);
 
-  // subscribe to Pusher once we have a username
+  // subscribe to Pusher
   useEffect(() => {
     if (!username) return;
     const pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_KEY, {
@@ -30,22 +30,25 @@ export default function ChatPage() {
       auth: { params: { username } },
     });
     const channel = pusher.subscribe("presence-chat");
-
-    channel.bind("pusher:subscription_succeeded", (m) => setMembers(m.count));
-    channel.bind("pusher:member_added", () => setMembers(channel.members.count));
-    channel.bind("pusher:member_removed", () => setMembers(channel.members.count));
-
+    channel.bind("pusher:subscription_succeeded", (m) =>
+      setMembers(m.count)
+    );
+    channel.bind("pusher:member_added", () =>
+      setMembers(channel.members.count)
+    );
+    channel.bind("pusher:member_removed", () =>
+      setMembers(channel.members.count)
+    );
     channel.bind("chat-event", (data) =>
       setMessages((m) => [...m, `${data.username}: ${data.message}`])
     );
-
     return () => {
       channel.unbind_all();
       pusher.unsubscribe("presence-chat");
     };
   }, [username]);
 
-  // auto-scroll whenever messages change
+  // auto-scroll on new messages
   useEffect(() => {
     if (chatRef.current) {
       chatRef.current.scrollTop = chatRef.current.scrollHeight;
@@ -63,30 +66,42 @@ export default function ChatPage() {
   };
 
   return (
-    <div className="flex-1 flex flex-col p-4 overflow-hidden text-[#a1dbf4] font-mono">
-      <div className="mb-4 text-sm">[ {members} ONLINE ]</div>
+    <div className="flex-1 flex flex-col overflow-hidden text-[#a1dbf4] font-mono">
+      <div className="p-4 text-sm">[ {members} ONLINE ]</div>
 
       <div
         ref={chatRef}
-        className="flex-1 overflow-y-auto space-y-2 text-sm"
+        className="flex-1 overflow-y-auto px-4 space-y-2 text-sm"
       >
         {messages.map((m, i) => (
           <div key={i}>{m}</div>
         ))}
       </div>
 
-      <div className="mt-4 flex-none flex">
+      <div
+        className="
+          sticky bottom-0 flex items-center bg-black
+          border-t border-[#a1dbf4] px-4 py-2
+          pb-[env(safe-area-inset-bottom)]
+        "
+      >
         <input
           type="text"
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && send()}
-          className="flex-1 p-2 bg-black border border-[#a1dbf4] text-[#a1dbf4] text-sm"
+          className="
+            flex-1 p-2 bg-black border border-[#a1dbf4]
+            text-[#a1dbf4] text-sm
+          "
           placeholder="Hit Enter to send…"
         />
         <button
           onClick={send}
-          className="ml-2 px-4 py-2 border border-[#a1dbf4] rounded hover:bg-[#a1dbf4]/20 text-sm"
+          className="
+            ml-2 px-4 py-2 border border-[#a1dbf4]
+            rounded hover:bg-[#a1dbf4]/20 text-sm
+          "
         >
           Send
         </button>

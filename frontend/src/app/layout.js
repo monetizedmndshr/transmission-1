@@ -29,12 +29,19 @@ export default function RootLayout({ children }) {
         {/* NAVBAR (fixed height) */}
         <nav className="flex-none w-full border-b border-[#a1dbf4]/20">
           <div className="max-w-3xl mx-auto flex items-center justify-between px-4 py-2">
-            <Link href="/dex" className="text-sm hover:underline">
+            
+            <Link 
+              href="https://dexscreener.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              >
               [ DEX ]
             </Link>
+            
             <Link href="/" className="text-sm hover:underline">
               [ MM ]
             </Link>
+            
             <Link
               href="https://x.com/MonetizedMNDSHR"
               target="_blank"
@@ -43,6 +50,7 @@ export default function RootLayout({ children }) {
             >
               [ X ]
             </Link>
+            
           </div>
         </nav>
 

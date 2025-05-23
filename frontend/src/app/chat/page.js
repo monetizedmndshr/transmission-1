@@ -1,3 +1,4 @@
+// src/app/chat/page.js
 "use client";
 
 import { useState, useEffect, useRef } from "react";
@@ -59,12 +60,12 @@ export default function ChatPage() {
   };
 
   return (
-    <div className="flex-1 flex flex-col overflow-hidden text-[#a1dbf4] font-mono">
+    <div className="flex-1 flex flex-col overflow-hidden overscroll-none text-[#a1dbf4] font-mono">
       <div className="p-4 text-sm">[ {members} ONLINE ]</div>
 
       <div
         ref={chatRef}
-        className="flex-1 overflow-y-auto px-4 space-y-2 text-sm"
+        className="flex-1 overflow-y-auto overscroll-contain px-4 space-y-2 text-sm"
       >
         {messages.map((m, i) => (
           <div key={i}>{m}</div>
@@ -75,9 +76,9 @@ export default function ChatPage() {
         className="
           mt-4 flex items-center bg-black
           px-4 py-2
-          /* mobile: 60px + safe-area inset */
-          pb-[calc(100px+env(safe-area-inset-bottom))]
-          /* md+: 1rem + safe-area inset */
+          /* mobile: 60px + safe‐area inset */
+          pb-[calc(60px+env(safe-area-inset-bottom))]
+          /* desktop+: 1rem + inset */
           md:pb-[calc(1rem+env(safe-area-inset-bottom))]
         "
       >
@@ -86,7 +87,10 @@ export default function ChatPage() {
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && send()}
-          className="flex-1 p-2 bg-black border border-[#a1dbf4] text-[#a1dbf4] text-sm"
+          className="
+            flex-1 p-2 bg-black border border-[#a1dbf4]
+            text-base placeholder:text-[#a1dbf4]
+          "
           placeholder="Hit Enter to send…"
         />
         <button

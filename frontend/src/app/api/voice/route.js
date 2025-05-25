@@ -1,23 +1,24 @@
 // src/app/api/voice/route.js
-import { NextResponse } from "next/server";
+import { VoiceResponse } from "twilio";
 
-// your TwiML message:
-const TWIML = `<?xml version="1.0" encoding="UTF-8"?>
-<Response>
-  <Say voice="alice">
-    Welcome to Monetized Mindshare. Transmission begins now.
-  </Say>
-  <Pause length="1"/>
-  <Hangup/>
-</Response>`;
+export async function POST(req) {
+  // build a TwiML response
+  const twiml = new VoiceResponse();
 
-export async function POST() {
-  return new NextResponse(TWIML, {
-    headers: { "Content-Type": "text/xml" },
+  // either play an MP3
+  // twiml.play("https://your-cdn.com/your-message.mp3");
+
+  // or have Twilio speak
+  twiml.say(
+    { voice: "alice", language: "en-US" },
+    "Welcome to Monetized Mindshare. Twelve clues, released every eight hours. Your wallet holds one percent of the key. Good luck."
+  );
+
+  // hang up when done
+  twiml.hangup();
+
+  // return TwiML XML
+  return new Response(twiml.toString(), {
+    headers: { "Content-Type": "application/xml" },
   });
-}
-
-// if Twilio ever does a GET instead:
-export async function GET() {
-  return POST();
 }

@@ -11,23 +11,18 @@ const shareTechMono = Share_Tech_Mono({
 });
 
 const bootMessages = [
-  "INITIALIZING CONNECTION...",
-  "SECURE LINK ESTABLISHED.",
-  "SOURCE: US-E.",
-  "...",
-  "TRANSMISSION:",
-  "WE ARE SEARCHING FOR THOSE WHO SEE PATTERNS OTHERS IGNORE.",
-  "THE FEW WHO QUESTION EVERYTHING.",
-  "EACH DAY, A CLUE WILL BE TRANSMITTED.",
-  "EACH CLUE, A FRAGMENT OF THE KEY.",
-  "ONLY ONE WILL PIECE IT TOGETHER.",
-  "ONLY ONE WILL UNLOCK THE VAULT.",
-  "YOU ARE BEING WATCHED.",
-  "MANY WILL TRY. MOST WILL FAIL.",
-  "GOOD LUCK.",
-  "- MM",
+  "SYSTEM BOOTING…",
+  "PROJECT: MONETIZED_MINDSHARE",
+  "WALLET ← 1%",
+  "CLUES ← 12",
+  "INTERVAL ← 06:00:00",
+  "TASK: FETCH_CLUE(n) EVERY INTERVAL",
+  "PROCESS: PARSE → AGGREGATE → DECRYPT",
+  "STATUS: 0%",
+  "END TRANSMISSION",
   ">_",
 ];
+
 
 export default function Terminal({ onDone }) {
   const [lines, setLines] = useState([]);

@@ -29,19 +29,24 @@ export default function Page() {
         src="/brain-no-bg.png"
         alt="MM Logo"
         width={200}
-        height={50}
+        height={40}
         priority
-        className="mx-auto mb-2 w-48 h-auto"
+        className="mx-auto mb-2 w-48 h-auto p-4"
       />
 
+      
+
       {/* SOL balance */}
-      <div className="mb-6 text-sm text-[#a1dbf4]">
+      <div className="mb-6 text-sm text-[#a1dbf4] p-2">
         {loadingBalance
           ? "Loading balance…"
           : balanceError
           ? balanceError
           : `$${usdBalance} USD`}
       </div>
+
+      {/* Countdown timer (resets every 8h) */}
+      <Timer />
 
       {/* Terminal */}
       <div className="w-full max-w-lg mx-auto">
@@ -56,6 +61,41 @@ export default function Page() {
           </button>
         </div>
       )}
+    </div>
+  );
+}
+
+function Timer() {
+  const [timeLeft, setTimeLeft] = useState("");
+
+  useEffect(() => {
+    // Launch at May 30 2025 20:00 CST → 2025-05-31T02:00:00Z
+    const LAUNCH = new Date("2025-05-31T02:00:00Z").getTime();
+    const INTERVAL = 8 * 60 * 60 * 1000; // 8 hours
+
+    const update = () => {
+      const now = Date.now();
+      const elapsed = now - LAUNCH;
+      // how far we are into the current 8h window
+      const msLeft = INTERVAL - (elapsed % INTERVAL);
+      const hrs = Math.floor(msLeft / (1000 * 60 * 60));
+      const mins = Math.floor((msLeft % (1000 * 60 * 60)) / (1000 * 60));
+      const secs = Math.floor((msLeft % (1000 * 60)) / 1000);
+      setTimeLeft(
+        `${String(hrs).padStart(2, "0")}:` +
+        `${String(mins).padStart(2, "0")}:` +
+        `${String(secs).padStart(2, "0")}`
+      );
+    };
+
+    update();
+    const id = setInterval(update, 1000);
+    return () => clearInterval(id);
+  }, []);
+
+  return (
+    <div className="p-4 mb-6 text-sm text-[#a1dbf4]">
+      NEXT CLUE IN: {timeLeft}
     </div>
   );
 }

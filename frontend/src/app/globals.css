@@ -9,3 +9,55 @@
 html {
   font-family: 'AkkuratMono', monospace;
 }
+
+/* globals.css */
+
+
+/* 1) Your inner “screen” container has rounded corners and clips its contents. */
+.crt-window {
+  position: relative;
+  border-radius: 1rem;    /* adjust to taste */
+  overflow: hidden;
+  height: 100%;
+  width: 100%;
+}
+
+/* 2) Your bezel‐style overlay covers the full viewport, un-clipped. */
+.crt-overlay {
+  position: fixed;
+  inset: 0;               /* full‐screen */
+  pointer-events: none;
+  z-index: 50;            /* sit on top of everything */
+  /*  top-level hard 10px bezel + 200px soft vignette inward */
+  box-shadow:
+    inset 0 0 0 10px #000,
+    inset 0 0 33px rgba(0,0,0,0.8);
+  /* no border-radius here */
+}
+
+
+/* CRT bezel + soft vignette with solid 10px black edge */
+.crt-overlay::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  /* 
+    1) inset 0 0 0 10px rgba(0,0,0,1) → solid black 10px border
+    2) inset 0 0 60px rgba(0,0,0,0.7) → gradual darkening inward
+  */
+  box-shadow:
+    inset 0 0 0 10px rgba(0, 0, 0, 1),
+    inset 0 0 60px rgba(0, 0, 0, 0.6);
+  border-radius: 3%;
+}
+
+.crt-overlay::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse at center,
+    transparent 60%,
+    rgba(0, 0, 0, 0.6) 100%
+  );
+}

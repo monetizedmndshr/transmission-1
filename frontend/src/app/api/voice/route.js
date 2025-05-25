@@ -1,40 +1,36 @@
 // src/app/api/voice/route.js
-export const runtime = "nodejs";   // ⚠️ must be first
+export const runtime = "nodejs"; // ⚠️ must be first
 
-import { VoiceResponse } from "twilio";
+import twilio from "twilio";
+const { VoiceResponse } = twilio.twiml;
 
 export async function POST(request) {
   try {
-    // 1) grab the raw url-encoded payload
+    // parse url-encoded body
     const body = await request.text();
-
-    // 2) parse it into a Map
     const params = new URLSearchParams(body);
     const From = params.get("From") || "";
     const To   = params.get("To")   || "";
 
     console.log("📞 inbound call from", From, "to", To);
 
-    // 3) build your TwiML
+    // build TwiML
     const twiml = new VoiceResponse();
     twiml.say(
       { voice: "alice", language: "en-US" },
-        "Congratulations and welcome to Monetized Mindshare. One percent. Twelve clues. Every 8 hours. Good luck."
+      "Congratulations and welcome to Monetized Mindshare. One percent. Twelve clues. Every eight hours. Good luck."
     );
     twiml.hangup();
 
-    // 4) return it as XML
     return new Response(twiml.toString(), {
       status: 200,
       headers: { "Content-Type": "application/xml" },
     });
   } catch (err) {
-    console.error("❌ /api/voice error:", err);
+    console.error("/api/voice error:", err);
     return new Response("Internal Server Error", { status: 500 });
   }
 }
 
-// also handle GET (in case Twilio retries with GET)
+// also allow GET
 export const GET = POST;
-
-

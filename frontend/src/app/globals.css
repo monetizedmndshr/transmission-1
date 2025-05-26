@@ -6,51 +6,43 @@
   font-family: 'AkkuratMono';
   src: url('/AkkuratMono-Regular.ttf') format('truetype');
 }
-html {
-  font-family: 'AkkuratMono', monospace;
-}
+html { font-family: 'AkkuratMono', monospace; }
 
-/* globals.css */
-
-
-/* 1) Your inner “screen” container has rounded corners and clips its contents. */
+/* clip-in CRT window */
 .crt-window {
   position: relative;
-  border-radius: 1rem;    /* adjust to taste */
+  border-radius: 1rem;
   overflow: hidden;
-  height: 100%;
   width: 100%;
+  height: 100%;
 }
 
-/* 2) Your bezel‐style overlay covers the full viewport, un-clipped. */
+/* 1) scan-line overlay */
+.scanline-overlay {
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(255,255,255,0.05) 1px,
+    transparent 1px
+  );
+  background-size: 100% 2px;
+}
+
+/* 2) Bezel + vignette */
 .crt-overlay {
-  position: fixed;
-  inset: 0;               /* full‐screen */
-  pointer-events: none;
-  z-index: 50;            /* sit on top of everything */
-  /*  top-level hard 10px bezel + 200px soft vignette inward */
+  /* dark frame + vignette */
   box-shadow:
     inset 0 0 0 10px #000,
-    inset 0 0 33px rgba(0,0,0,0.8);
-  /* no border-radius here */
+    inset 0 0 60px rgba(0,0,0,0.6);
 }
-
-
-/* CRT bezel + soft vignette with solid 10px black edge */
 .crt-overlay::after {
   content: "";
   position: absolute;
   inset: 0;
-  /* 
-    1) inset 0 0 0 10px rgba(0,0,0,1) → solid black 10px border
-    2) inset 0 0 60px rgba(0,0,0,0.7) → gradual darkening inward
-  */
   box-shadow:
-    inset 0 0 0 10px rgba(0, 0, 0, 1),
-    inset 0 0 60px rgba(0, 0, 0, 0.6);
+    inset 0 0 0 10px rgba(0,0,0,1),
+    inset 0 0 60px rgba(0,0,0,0.6);
   border-radius: 3%;
 }
-
 .crt-overlay::before {
   content: "";
   position: absolute;
@@ -58,6 +50,44 @@ html {
   background: radial-gradient(
     ellipse at center,
     transparent 60%,
-    rgba(0, 0, 0, 0.6) 100%
+    rgba(0,0,0,0.6) 100%
   );
+}
+
+/* 3) Glass pane — tint & glow only */
+.glass-overlay-no-blur {
+  background: rgba(255,255,255,0.02);
+  backdrop-filter: blur(0.8px) brightness(1.4) saturate(1.1);
+  box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.04),  /* inner */
+    0 0 20px rgba(255, 255, 255, 0.02);         /* outer */
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+/* scanlines & chromatic remain unchanged */
+.scanline-overlay {
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(255,255,255,0.05) 1px,
+    transparent 1px
+  );
+  background-size: 100% 2px;
+}
+
+.chromatic-overlay {
+  background: inherit;
+}
+.chromatic-overlay::before,
+.chromatic-overlay::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: inherit;
+  pointer-events: none;
+  mix-blend-mode: screen;
+}
+.chromatic-overlay::before {
+  filter: drop-shadow(2px 0 0 red) blur(0.5px);
+}
+.chromatic-overlay::after {
+  filter: drop-shadow(-2px 0 0 blue) blur(0.5px);
 }

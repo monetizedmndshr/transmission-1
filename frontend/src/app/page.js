@@ -4,6 +4,8 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import Terminal from "./components/Terminal";
+import Link from "next/link";
+
 
 export default function Page() {
   const [isFinished, setIsFinished] = useState(false);
@@ -25,16 +27,15 @@ export default function Page() {
   return (
     <div className="flex-1 flex flex-col items-center p-4 overflow-auto">
       {/* Logo */}
-      <Image
-        src="/brain-no-bg.png"
+      <img
+        src="/brain.gif"
         alt="MM Logo"
         width={200}
         height={40}
-        priority
+        priority="true"
+        unoptimized="true"
         className="mx-auto mb-2 w-48 h-auto p-4"
       />
-
-      
 
       {/* SOL balance */}
       <div className="mb-6 text-sm text-[#a1dbf4] p-2">
@@ -61,6 +62,24 @@ export default function Page() {
           </button>
         </div>
       )}
+
+      {/* Bottom-right eye GIF */}  
+      <Link href="/chat" className="fixed bottom-10 right-10 z-10000">
+        <img
+            src="/mm-eye.gif"
+            alt="you are being evaluated."
+            className="
+              pointer-events-auto
+              fixed
+              bottom-10
+              right-10
+              w-12
+              h-12
+              sm:w-16
+              sm:h-16
+            "
+          />
+        </Link>
     </div>
   );
 }

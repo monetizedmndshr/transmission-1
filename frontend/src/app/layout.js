@@ -37,7 +37,7 @@ export default function RootLayout({ children }) {
           </div>
         </nav>
 
-        <main className="relative z-10 flex-1 flex flex-col overflow-hidden min-h-0">
+          <main className="relative z-10 flex-1 flex flex-col overflow-hidden min-h-0">
           <div 
             className="
               crt-window 

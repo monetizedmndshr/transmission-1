@@ -64,8 +64,8 @@ export default function ChatPage() {
    <div className="flex-1 flex flex-col overflow-hidden text-[#a1dbf4] font-mono">
 
       {/* Header (online count) */}
-      <div className="p-4 text-sm">[ {members} ONLINE ]</div>
-
+     <div className="flex-none w-full flex justify-center p-4 text-sm">
+        [ {members} ONLINE ]</div>
       {/* ONLY this pane scrolls */}
       <div
         ref={chatRef}

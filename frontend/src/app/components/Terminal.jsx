@@ -11,16 +11,15 @@ const shareTechMono = Share_Tech_Mono({
 });
 
 const bootMessages = [
-  "SYSTEM BOOTING…",
-  "PROJECT: MONETIZED_MINDSHARE",
-  "WALLET ← 1%",
-  "CLUES ← 12",
-  "INTERVAL ← 06:00:00",
-  "TASK: FETCH_CLUE(n) EVERY INTERVAL",
-  "PROCESS: PARSE → AGGREGATE → DECRYPT",
-  "STATUS: 0%",
-  "END TRANSMISSION",
-  ">_",
+  "> UPLINK ESTABLISHED…",
+  "\n",                           // ← blank line here
+  "> PROJECT: MONETIZED-MINDSHARE",
+  "> MISSION: TURN ATTENTION INTO VALUE",
+  "> VISION: EMPOWER THE OBSERVED",
+  "\n",                           // ← blank line here
+  "> CONSCIOUSNESS = CURRENCY",
+  "> STATUS: AUTHORIZED",
+  ">_"
 ];
 
 

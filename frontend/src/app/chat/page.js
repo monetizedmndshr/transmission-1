@@ -61,7 +61,7 @@ export default function ChatPage() {
 
   return (
     // Fill available height, but no overflow here
-    <div className="flex-1 flex flex-col overflow-hidden text-[#a1dbf4] font-mono">
+   <div className="flex-1 flex flex-col overflow-hidden text-[#a1dbf4] font-mono">
 
       {/* Header (online count) */}
       <div className="p-4 text-sm">[ {members} ONLINE ]</div>

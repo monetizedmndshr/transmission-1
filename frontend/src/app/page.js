@@ -114,7 +114,7 @@ function Timer() {
 
   return (
     <div className="p-4 mb-6 text-sm text-[#a1dbf4]">
-      NEXT CLUE IN: {timeLeft}
+      INCOMING SIGNAL:{timeLeft}
     </div>
   );
 }

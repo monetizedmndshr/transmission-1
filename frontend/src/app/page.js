@@ -25,7 +25,7 @@ export default function Page() {
   }, []);
 
   return (
-    <div className="flex-1 flex flex-col items-center p-4 overflow-auto">
+    <div className="flex-1 flex flex-col items-center p-4 overflow-hidden">
       {/* Logo */}
       <img
         src="/brain.gif"
@@ -50,7 +50,7 @@ export default function Page() {
       <Timer />
 
       {/* Terminal */}
-      <div className="w-full max-w-lg mx-auto">
+      <div className="w-full max-w-lg mx-auto overflow-auto">
         <Terminal onDone={() => setIsFinished(true)} />
       </div>
 

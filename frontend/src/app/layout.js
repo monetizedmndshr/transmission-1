@@ -37,8 +37,7 @@ export default function RootLayout({ children }) {
           </div>
         </nav>
 
-          <main className="relative z-10 flex-1 flex flex-col overflow-hidden min-h-0">
-          <div 
+        <main className="relative z-10 flex-1 flex flex-col overflow-hidden min-h-0">          <div 
             className="
               crt-window 
               relative 
@@ -47,7 +46,7 @@ export default function RootLayout({ children }) {
               min-h-0              /* ← allow children to shrink to 0 */
               w-full max-w-4xl
             "
-          >
+            >
             {children}
           </div>
         </main>

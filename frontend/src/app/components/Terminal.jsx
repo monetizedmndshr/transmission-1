@@ -10,37 +10,52 @@ const shareTechMono = Share_Tech_Mono({
   display: "swap",
 });
 
-const bootMessages = [
+// default home‐page messages
+const defaultBoot = [
   "> UPLINK ESTABLISHED…",
-  "\n",                           // ← blank line here
-  "> PROJECT: MONETIZED-MINDSHARE",
+  "",  // blank line
+  "> PROJECT: MONETIZED MINDSHARE",
   "> MISSION: TURN ATTENTION INTO VALUE",
   "> VISION: EMPOWER THE OBSERVED",
-  "\n",                           // ← blank line here
+  "",  // blank line
   "> CONSCIOUSNESS = CURRENCY",
   "> STATUS: AUTHORIZED",
   ">_"
 ];
 
-
-export default function Terminal({ onDone }) {
-  const [lines, setLines] = useState([]);
+export default function Terminal({
+  onDone,
+  messages = defaultBoot  // allow passing a custom array
+}) {
+  const [lines, setLines]       = useState([]);
   const [lineIndex, setLineIndex] = useState(0);
   const [charIndex, setCharIndex] = useState(0);
   const outputRef = useRef(null);
 
-  // Typewriter effect
   useEffect(() => {
-    if (lineIndex >= bootMessages.length) return;
-    const current = bootMessages[lineIndex];
+    if (lineIndex >= messages.length) return;
+
+    const current = messages[lineIndex];
+
+    // handle blank lines instantly
+    if (current.trim() === "") {
+      setLines(prev => [...prev, ""]);
+      setLineIndex(li => li + 1);
+      setCharIndex(0);
+      return;
+    }
+
     const charDelay = 20;
     const linePause = 100;
 
     const timer = setTimeout(() => {
       setLines(prev => {
         const next = [...prev];
-        if (next.length <= lineIndex) next.push(current.charAt(charIndex));
-        else next[lineIndex] += current.charAt(charIndex);
+        if (next.length <= lineIndex) {
+          next.push(current.charAt(0));
+        } else {
+          next[lineIndex] += current.charAt(charIndex);
+        }
         return next;
       });
 
@@ -53,18 +68,17 @@ export default function Terminal({ onDone }) {
     }, charIndex < current.length - 1 ? charDelay : charDelay + linePause);
 
     return () => clearTimeout(timer);
-  }, [charIndex, lineIndex]);
+  }, [charIndex, lineIndex, messages]);
 
-  // Auto-scroll
+  // auto-scroll & onDone trigger
   useEffect(() => {
     if (outputRef.current) {
       outputRef.current.scrollTop = outputRef.current.scrollHeight;
     }
-    // Fire onDone when we've advanced past the last message
-    if (lineIndex === bootMessages.length && onDone) {
+    if (lineIndex === messages.length && onDone) {
       onDone();
     }
-  }, [lines, lineIndex, onDone]);
+  }, [lines, lineIndex, messages.length, onDone]);
 
   return (
     <div

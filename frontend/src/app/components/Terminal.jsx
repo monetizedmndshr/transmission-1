@@ -85,7 +85,7 @@ export default function Terminal({
       ref={outputRef}
       className={`
         ${shareTechMono.className}
-        w-full space-y-1 text-sm text-[#a1dbf4] text-left
+        w-full space-y-1 text-sm text-[#ffba00] text-left
         whitespace-pre-wrap break-words
         md:whitespace-pre
       `}

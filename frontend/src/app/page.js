@@ -39,7 +39,7 @@ export default function Page() {
 </Link>
 
       {/* SOL balance */}
-      <div className="mb-6 text-sm text-[#a1dbf4] p-2">
+      <div className="mb-6 text-sm text-[#ffba00] p-2">
         {loadingBalance
           ? "Loading balance…"
           : balanceError
@@ -116,7 +116,7 @@ function Timer() {
   }, []);
 
   return (
-    <div className="p-4 mb-6 text-sm text-[#a1dbf4]">
+    <div className="p-4 mb-6 text-sm text-[#ffba00]">
       INCOMING SIGNAL: {timeLeft}
     </div>
   );

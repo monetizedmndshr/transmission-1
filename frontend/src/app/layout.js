@@ -18,7 +18,7 @@ export default function RootLayout({ children }) {
       <body
         className={`
           ${shareTechMono.className}
-          relative bg-black text-[#a1dbf4]
+          relative bg-black text-[#ffba00]
           font-mono flex flex-col items-center justify-center 
           h-screen  /* lock to viewport height */
           p-4 overflow-hidden
@@ -27,7 +27,7 @@ export default function RootLayout({ children }) {
       >
 
         {/* NAV & CONTENT (z-10) */}
-        <nav className="relative z-10 flex-none w-full border-b border-[#a1dbf4]/20">
+        <nav className="relative z-10 flex-none w-full border-b border-[#ffba00]/20">
           <div className="max-w-3xl mx-auto flex items-center justify-between px-4 py-2">
             <Link href="/dex" className="text-sm hover:underline">[ DEX ]</Link>
             <Link href="/"    className="text-sm hover:underline">[ MM ]</Link>

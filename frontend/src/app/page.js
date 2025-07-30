@@ -26,7 +26,7 @@ export default function Page() {
   return (
     <div className="flex-1 flex flex-col items-center p-4 overflow-hidden">
       {/* Logo */}
-      <Link href="/secret">
+      {/* <Link href="/secret"> */}
   <img
     src="/brain.gif"
     alt="MM Logo"
@@ -34,9 +34,9 @@ export default function Page() {
     height={40}
     priority="true"
     unoptimized="true"
-    className="mx-auto mb-2 w-48 h-auto p-4 cursor-default"
+    className="mx-auto mb-2 w-48 h-auto p-4 cursor-pointer"
   />
-</Link>
+{/* </Link> */}
 
       {/* SOL balance */}
       <div className="mb-6 text-sm text-[#ffba00] p-2">

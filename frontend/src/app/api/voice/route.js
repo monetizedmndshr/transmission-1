@@ -18,7 +18,7 @@ export async function POST(request) {
     const twiml = new VoiceResponse();
     twiml.say(
       { voice: "alice", language: "en-US" },
-      "Welcome to Monetized Mindshare. We are seeking individuals who recognize patterns others don’t.Private keys will be released over the next few hours containing supply. It is up to you to read between the lines. Goodluck."
+      "Welcome to Monetized Mindshare. We are seeking individuals who recognize patterns that others don't. Private keys will be released over the next few hours containing various amounts of supply. It's up to you to read in between the lines. Goodluck."
     );
     twiml.hangup();
 

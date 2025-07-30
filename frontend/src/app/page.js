@@ -34,7 +34,7 @@ export default function Page() {
     height={40}
     priority="true"
     unoptimized="true"
-    className="mx-auto mb-2 w-48 h-auto p-4 cursor-pointer"
+    className="mx-auto mb-2 w-48 h-auto p-4 cursor-default"
   />
 </Link>
 

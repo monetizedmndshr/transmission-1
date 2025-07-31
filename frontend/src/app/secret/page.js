@@ -51,11 +51,11 @@ export default function SecretPage() {
     "> STATUS: AUTHORIZED",
     "",
     // ── KEY SHARD FILES ──
-    "> K1: e3f1a7b9c2d4",
-    "> K2: 9b2c4d6e8f1a",
-    "> K3: c7d9e1f3a5b2",
-    "> K4: 5a8c1d3f7b9e",
-    "> K5: 2d4f6a8c0b1e",
+    "> K1: aLmyRYWQyRTEvNs1oT",
+    "> K2: tHVbUbhxHTpkiAKCa9",
+    "> K3: ToSXHPN5e3DSvG6eoZ",
+    "> K4: yk85VMuk4AbUQaVXUp",
+    "> K5: oBNtTZrzCjmAt9E",
     "",
     // ── RECONSTRUCTION ──
     "> KEY = K1 + K2 + K3 + K4 + K5",

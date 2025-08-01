@@ -19,43 +19,164 @@ export async function GET() {
     // Connect to Solana RPC
     const conn = new Connection(clusterApiUrl("mainnet-beta"));
     
-    // Get balances for all wallets in parallel
-    const balancePromises = wallets.map(wallet => 
-      conn.getBalance(new PublicKey(wallet))
+    let totalValueUsd = 0;
+    let allTokens = {};
+    let walletBreakdown = [];
+
+    // Process each wallet
+    for (const walletAddress of wallets) {
+      const publicKey = new PublicKey(walletAddress);
+      let walletValueUsd = 0;
+      let walletTokens = {};
+
+      // 1. Get SOL balance
+      const lamports = await conn.getBalance(publicKey);
+      const solBalance = lamports / LAMPORTS_PER_SOL;
+      
+      if (solBalance > 0) {
+        walletTokens['SOL'] = {
+          amount: solBalance,
+          symbol: 'SOL',
+          mint: 'So11111111111111111111111111111111111111112'
+        };
+      }
+
+      // 2. Get all token accounts (SPL tokens)
+      try {
+        const tokenAccounts = await conn.getTokenAccountsByOwner(publicKey, {
+          programId: new PublicKey("TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA")
+        });
+
+        for (const { account } of tokenAccounts.value) {
+          const accountInfo = await conn.getParsedAccountInfo(account.pubkey);
+          const parsedInfo = accountInfo.value?.data?.parsed?.info;
+          
+          if (parsedInfo && parseFloat(parsedInfo.tokenAmount.uiAmount) > 0) {
+            const mint = parsedInfo.mint;
+            const amount = parseFloat(parsedInfo.tokenAmount.uiAmount);
+            
+            // Try to get token metadata
+            let symbol = mint.slice(0, 8) + '...'; // fallback
+            try {
+              const metadataResponse = await fetch(
+                `https://api.solana.fm/v1/tokens/${mint}`
+              );
+              if (metadataResponse.ok) {
+                const metadata = await metadataResponse.json();
+                symbol = metadata.tokenList?.symbol || symbol;
+              }
+            } catch (e) {
+              // Use fallback symbol
+            }
+
+            if (walletTokens[mint]) {
+              walletTokens[mint].amount += amount;
+            } else {
+              walletTokens[mint] = {
+                amount,
+                symbol,
+                mint
+              };
+            }
+          }
+        }
+      } catch (tokenError) {
+        console.warn(`Error fetching tokens for ${walletAddress}:`, tokenError.message);
+      }
+
+      // Add wallet tokens to global count
+      for (const [mint, tokenData] of Object.entries(walletTokens)) {
+        if (allTokens[mint]) {
+          allTokens[mint].amount += tokenData.amount;
+        } else {
+          allTokens[mint] = { ...tokenData };
+        }
+      }
+
+      walletBreakdown.push({
+        address: walletAddress,
+        tokens: walletTokens
+      });
+    }
+
+    // 3. Get prices for all unique tokens
+    const tokenMints = Object.keys(allTokens);
+    const prices = {};
+    
+    // Get SOL price
+    try {
+      const solResponse = await fetch(
+        "https://api.coingecko.com/api/v3/simple/price?ids=solana&vs_currencies=usd"
+      );
+      const solData = await solResponse.json();
+      prices['So11111111111111111111111111111111111111112'] = solData.solana?.usd || 0;
+      prices['SOL'] = solData.solana?.usd || 0;
+    } catch (e) {
+      console.warn("Failed to fetch SOL price:", e.message);
+      prices['SOL'] = 0;
+    }
+
+    // Get other token prices using Jupiter API (better for Solana tokens)
+    const otherMints = tokenMints.filter(mint => 
+      mint !== 'SOL' && mint !== 'So11111111111111111111111111111111111111112'
     );
     
-    const lamportsArray = await Promise.all(balancePromises);
+    if (otherMints.length > 0) {
+      try {
+        // Jupiter price API supports multiple tokens
+        const jupiterResponse = await fetch(
+          `https://price.jup.ag/v4/price?ids=${otherMints.join(',')}`
+        );
+        
+        if (jupiterResponse.ok) {
+          const jupiterData = await jupiterResponse.json();
+          
+          for (const mint of otherMints) {
+            prices[mint] = jupiterData.data?.[mint]?.price || 0;
+          }
+        }
+      } catch (e) {
+        console.warn("Failed to fetch token prices from Jupiter:", e.message);
+        // Set fallback prices to 0
+        for (const mint of otherMints) {
+          prices[mint] = 0;
+        }
+      }
+    }
+
+    // 4. Calculate total USD value
+    let totalBreakdown = [];
     
-    // Sum all balances and convert to SOL
-    const totalLamports = lamportsArray.reduce((sum, lamports) => sum + lamports, 0);
-    const totalSol = totalLamports / LAMPORTS_PER_SOL;
+    for (const [mint, tokenData] of Object.entries(allTokens)) {
+      const price = prices[mint] || 0;
+      const usdValue = tokenData.amount * price;
+      totalValueUsd += usdValue;
+      
+      totalBreakdown.push({
+        symbol: tokenData.symbol,
+        mint: mint,
+        amount: tokenData.amount.toFixed(6),
+        priceUsd: price.toFixed(6),
+        valueUsd: usdValue.toFixed(2)
+      });
+    }
 
-    // Fetch USD price from CoinGecko
-    const res = await fetch(
-      "https://api.coingecko.com/api/v3/simple/price?ids=solana&vs_currencies=usd"
-    );
-    const json = await res.json();
-    const price = json.solana?.usd;
-    if (price == null) throw new Error("Price lookup failed");
+    // Sort by USD value (highest first)
+    totalBreakdown.sort((a, b) => parseFloat(b.valueUsd) - parseFloat(a.valueUsd));
 
-    const totalUsd = (totalSol * price).toFixed(2);
-    
-    // Optional: return breakdown by wallet
-    const walletBreakdown = wallets.map((wallet, index) => ({
-      address: wallet,
-      sol: (lamportsArray[index] / LAMPORTS_PER_SOL).toFixed(4),
-      usd: ((lamportsArray[index] / LAMPORTS_PER_SOL) * price).toFixed(2)
-    }));
-
-    return NextResponse.json({ 
-      totalUsd,
-      totalSol: totalSol.toFixed(4),
+    return NextResponse.json({
+      totalUsd: totalValueUsd.toFixed(2),
       walletCount: wallets.length,
-      breakdown: walletBreakdown // Optional detailed breakdown
+      tokenCount: Object.keys(allTokens).length,
+      breakdown: totalBreakdown,
+      // walletBreakdown: walletBreakdown // Uncomment if you want per-wallet details
     });
     
   } catch (err) {
-    console.error(err);
-    return NextResponse.json({ error: err.message }, { status: 500 });
+    console.error("Balance API Error:", err);
+    return NextResponse.json({ 
+      error: err.message,
+      totalUsd: "0.00" // Fallback for frontend
+    }, { status: 500 });
   }
 }

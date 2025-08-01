@@ -38,6 +38,11 @@ export default function Page() {
   />
 {/* </Link> */}
 
+      {/* Text area for project description */}
+      <div className="mb-6 text-xs text-[#ffba00] text-center max-w-lg px-4 leading-relaxed">
+        CA Coming Soon...
+      </div>
+
       {/* SOL balance */}
       <div className="mb-6 text-sm text-[#ffba00] p-2">
         {loadingBalance

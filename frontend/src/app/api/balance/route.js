@@ -4,15 +4,33 @@ import { Connection, PublicKey, clusterApiUrl, LAMPORTS_PER_SOL } from "@solana/
 
 export async function GET() {
   try {
-    const wallet = process.env.SOL_WALLET_ADDRESS;
-    if (!wallet) throw new Error("Wallet not configured");
+    // Get wallets from environment variable (comma-separated) or use hardcoded list
+    const walletsEnv = process.env.SOL_WALLETS;
+    const wallets = walletsEnv 
+      ? walletsEnv.split(',').map(w => w.trim())
+      : [
+          "EikiywK4B3xYHnXasUKVCtiduaczgjsYjUyLNSd3e7xb",
+          "AaftVoaV6JJ2R4bn87bo97cXhHuoGgDEstPHyaMXecF9", 
+          "7L1sarhQFDo89HtF1j7kSt1qzH3ZFXrzMVtxvxfkHLSk",
+          "H8dtdh454gYPTNPFbf8RZ4h3s9GaquPvFPPSgfhdSqRj",
+          "B4cqTiSf13PrzV5NRLRQ6QjiEhtpRGQ6UtCcsqBs6Td9"
+        ];
 
-    // talk to Solana RPC from Node
+    // Connect to Solana RPC
     const conn = new Connection(clusterApiUrl("mainnet-beta"));
-    const lamports = await conn.getBalance(new PublicKey(wallet));
-    const sol = lamports / LAMPORTS_PER_SOL;
+    
+    // Get balances for all wallets in parallel
+    const balancePromises = wallets.map(wallet => 
+      conn.getBalance(new PublicKey(wallet))
+    );
+    
+    const lamportsArray = await Promise.all(balancePromises);
+    
+    // Sum all balances and convert to SOL
+    const totalLamports = lamportsArray.reduce((sum, lamports) => sum + lamports, 0);
+    const totalSol = totalLamports / LAMPORTS_PER_SOL;
 
-    // fetch USD price from CoinGecko
+    // Fetch USD price from CoinGecko
     const res = await fetch(
       "https://api.coingecko.com/api/v3/simple/price?ids=solana&vs_currencies=usd"
     );
@@ -20,8 +38,22 @@ export async function GET() {
     const price = json.solana?.usd;
     if (price == null) throw new Error("Price lookup failed");
 
-    const usd = (sol * price).toFixed(2);
-    return NextResponse.json({ usd });
+    const totalUsd = (totalSol * price).toFixed(2);
+    
+    // Optional: return breakdown by wallet
+    const walletBreakdown = wallets.map((wallet, index) => ({
+      address: wallet,
+      sol: (lamportsArray[index] / LAMPORTS_PER_SOL).toFixed(4),
+      usd: ((lamportsArray[index] / LAMPORTS_PER_SOL) * price).toFixed(2)
+    }));
+
+    return NextResponse.json({ 
+      totalUsd,
+      totalSol: totalSol.toFixed(4),
+      walletCount: wallets.length,
+      breakdown: walletBreakdown // Optional detailed breakdown
+    });
+    
   } catch (err) {
     console.error(err);
     return NextResponse.json({ error: err.message }, { status: 500 });

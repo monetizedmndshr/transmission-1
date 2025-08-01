@@ -16,7 +16,7 @@ export default function Page() {
     fetch("/api/balance")
       .then((res) => res.json())
       .then((data) => {
-        if (data.usd) setUsdBalance(data.usd);
+        if (data.totalUsd) setUsdBalance(data.totalUsd);
         else setBalanceError(data.error || "Error");
       })
       .catch(() => setBalanceError("Fetch failed"))

@@ -61,7 +61,7 @@ export default function ChatPage() {
 
   return (
     // Fill available height, but no overflow here
-   <div className="flex-1 flex flex-col overflow-hidden text-[#ffba00] font-mono">
+   <div className="flex-1 flex flex-col overflow-hidden text-[#99C2FA] font-mono">
 
       {/* Header (online count) */}
      <div className="flex-none w-full flex justify-center p-4 text-sm">
@@ -91,8 +91,8 @@ export default function ChatPage() {
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && send()}
           className="
-            flex-1 p-2 bg-black border border-[#ffba00]
-            text-base placeholder:text-[#ffba00]
+            flex-1 p-2 bg-black border border-[#99C2FA]
+            text-base placeholder:text-[#99C2FA]
           "
           placeholder="Hit Enter to send…"
         />

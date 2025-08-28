@@ -24,7 +24,7 @@ export default function Page() {
   }, []);
 
   return (
-    <div className="flex-1 flex flex-col items-center p-4 overflow-hidden">
+  <div className="flex-1 flex flex-col items-center p-4 overflow-hidden text-[#99C2FA]">
       {/* Logo */}
       {/* <Link href="/secret"> */}
   <img
@@ -39,12 +39,12 @@ export default function Page() {
 {/* </Link> */}
 
       {/* Text area for project description */}
-      <div className="mb-6 text-xs text-[#ffba00] text-center max-w-lg px-4 leading-relaxed">
+      <div className="mb-6 text-xs text-[#99C2FA] text-center max-w-lg px-4 leading-relaxed">
         CA Coming Soon...
       </div>
 
       {/* SOL balance */}
-      <div className="mb-6 text-sm text-[#ffba00] p-2">
+      <div className="mb-6 text-sm text-[#99C2FA] p-2">
         {loadingBalance
           ? "Loading balance…"
           : balanceError
@@ -121,7 +121,7 @@ function Timer() {
   }, []);
 
   return (
-    <div className="p-4 mb-6 text-sm text-[#ffba00]">
+    <div className="p-4 mb-6 text-sm text-[#99C2FA]">
       INCOMING SIGNAL: {timeLeft}
     </div>
   );

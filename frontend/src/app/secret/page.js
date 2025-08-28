@@ -22,7 +22,7 @@ export default function SecretPage() {
   }, []);
 
   return (
-    <div className="flex-1 flex flex-col items-center p-4 overflow-hidden">
+  <div className="flex-1 flex flex-col items-center p-4 overflow-hidden text-[#99C2FA]">
       {/* Brain logo links back home */}
         <img
           src="/mm-logo.png"

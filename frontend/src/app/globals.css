@@ -6,7 +6,11 @@
   font-family: 'AkkuratMono';
   src: url('/AkkuratMono-Regular.ttf') format('truetype');
 }
-html { font-family: 'AkkuratMono', monospace; }
+
+html { 
+  font-family: 'AkkuratMono', monospace; 
+  color: #99C2FA; /* <- makes all text this blue */
+}
 
 /* clip-in CRT window */
 .crt-window {
@@ -89,5 +93,5 @@ html { font-family: 'AkkuratMono', monospace; }
   filter: drop-shadow(2px 0 0 red) blur(0.5px);
 }
 .chromatic-overlay::after {
-  filter: drop-shadow(-2px 0 0 blue) blur(0.5px);
+  filter: drop-shadow(-2px 0 0 #99C2FA) blur(0.5px); /* swapped pure blue for your custom blue */
 }

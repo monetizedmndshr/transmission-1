@@ -18,7 +18,7 @@ export default function RootLayout({ children }) {
       <body
         className={`
           ${shareTechMono.className}
-          relative bg-black text-[#ffba00]
+          relative bg-black text-[#99C2FA]
           font-mono flex flex-col items-center justify-center 
           h-screen  /* lock to viewport height */
           p-4 overflow-hidden
